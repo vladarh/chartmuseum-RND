@@ -24,3 +24,8 @@ cmd/chartmuseum/debug
 vendor
 _dist/
 .DS_Store
+# Allow Helm repo files in docs/
+!docs/index.yaml
+!docs/*.tgz
+!docs/.nojekyll
+!docs/index.html

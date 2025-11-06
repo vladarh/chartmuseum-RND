@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chartmuseum-migrator
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrator
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SRC_URL
+              value: "{{ .Values.env.SRC_URL }}"
+            - name: SRC_USER
+              value: "{{ .Values.env.SRC_USER }}"
+            - name: SRC_PASS
+              value: "{{ .Values.env.SRC_PASS }}"
+            - name: TGT_URL
+              value: "{{ .Values.env.TGT_URL }}"
+            - name: TGT_USER
+              value: "{{ .Values.env.TGT_USER }}"
+            - name: TGT_PASS
+              value: "{{ .Values.env.TGT_PASS }}"
+            - name: VAULT_ADDR
+              value: "{{ .Values.env.VAULT_ADDR }}"
+            - name: VAULT_TOKEN
+              value: "{{ .Values.env.VAULT_TOKEN }}"
+            - name: EXTRA_ARGS
+              value: "{{ .Values.env.EXTRA_ARGS }}"
+          command:
+            - /bin/sh
+            - -ce
+            - |
+              echo "Starting chart migration job..."
+              python3 migrate_cm.py --out /work/out ${EXTRA_ARGS}

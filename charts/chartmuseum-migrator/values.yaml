@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/vladarh/chartmuseum-rnd-migrator
-  tag: "20251106-184056"
+  tag: "20251106-185115"
   pullPolicy: IfNotPresent
 
 env:

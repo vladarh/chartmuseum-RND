@@ -2,6 +2,6 @@ apiVersion: v2
 name: chartmuseum-migrator
 description: Migrate Helm charts from SRC to TGT using Vault (no overwrite)
 type: application
-version: 20251106-183744
-appVersion: "20251106-183744"
-home: https://github.com/
+version: 0.1.0              # ✅ Valid SemVer
+appVersion: "20251106-183744"  # ✅ Timestamp goes here
+home: https://github.com/vladarh/chartmuseum-RND

@@ -1,0 +1,15 @@
+# Build stage
+FROM golang:1.24 AS build
+WORKDIR /src
+ENV GOTOOLCHAIN=auto CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+COPY go.mod ./
+RUN go mod download
+COPY . .
+RUN go build -o /chartmuseum ./cmd/chartmuseum
+
+# Runtime
+FROM gcr.io/distroless/static:nonroot
+COPY --from=build /chartmuseum /chartmuseum
+USER nonroot:nonroot
+EXPOSE 8080
+ENTRYPOINT ["/chartmuseum"]

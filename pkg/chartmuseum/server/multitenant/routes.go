@@ -1,24 +1,7 @@
-/*
-Copyright The Helm Authors.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package multitenant
 
 import (
 	cm_auth "github.com/chartmuseum/auth"
-
 	cm_router "helm.sh/chartmuseum/pkg/chartmuseum/router"
 )
 
@@ -53,6 +36,14 @@ func (s *MultiTenantServer) Routes() []*cm_router.Route {
 		{Method: "POST", Path: "/api/:repo/prov", Handler: s.postProvenanceFileRequestHandler, Action: cm_auth.PushAction},
 	}
 
+	// New multi-tenant listing/aggregation endpoints
+	repositoryListingRoutes := []*cm_router.Route{
+		{Method: "GET", Path: "/api/repositories", Handler: s.listRepositoriesHandler, Action: cm_auth.PullAction},
+	}
+	chartsAllRoutes := []*cm_router.Route{
+		{Method: "GET", Path: "/api/charts-all", Handler: s.listAllChartsAcrossReposHandler, Action: cm_auth.PullAction},
+	}
+
 	routes = append(routes, serverInfoRoutes...)
 	routes = append(routes, helmChartRepositoryRoutes...)
 
@@ -71,10 +62,23 @@ func (s *MultiTenantServer) Routes() []*cm_router.Route {
 
 	if s.APIEnabled {
 		routes = append(routes, chartManipulationRoutes...)
+
+		// Register new endpoints (handlers also enforce flags)
+		if s.allowListRepos() {
+			routes = append(routes, repositoryListingRoutes...)
+		}
+		if s.allowChartsAll() {
+			routes = append(routes, chartsAllRoutes...)
+		}
 	}
 
 	if s.APIEnabled && !s.DisableDelete {
-		routes = append(routes, &cm_router.Route{Method: "DELETE", Path: "/api/:repo/charts/:name/:version", Handler: s.deleteChartVersionRequestHandler, Action: cm_auth.PushAction})
+		routes = append(routes, &cm_router.Route{
+			Method:  "DELETE",
+			Path:    "/api/:repo/charts/:name/:version",
+			Handler: s.deleteChartVersionRequestHandler,
+			Action:  cm_auth.PushAction,
+		})
 	}
 
 	return routes

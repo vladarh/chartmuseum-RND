@@ -1,7 +1,17 @@
-# Don't bring in anything into the build context
+# Ignore build outputs and VCS
+_dist/
+bin/
+vendor/
+.git/
+.gitignore
+.DS_Store
 
-*
-
-# Bring in our binary
-
-!_dist/linux-*
+# DO NOT ignore go.mod/go.sum or source
+!go.mod
+!go.sum
+!cmd/**
+!pkg/**
+!testdata/**
+!acceptance_tests/**
+!scripts/**
+!Makefile

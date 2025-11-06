@@ -147,6 +147,36 @@ var configVars = map[string]configVar{
 			EnvVar: "JSON_INDEX",
 		},
 	},
+
+	// NEW: feature flags for repo listing/aggregation
+	"enable-list-repos": {
+		Type:    boolType,
+		Default: true,
+		CLIFlag: cli.BoolFlag{
+			Name:   "enable-list-repos",
+			Usage:  "enable repository listing endpoint (/api/repositories)",
+			EnvVar: "ENABLE_LIST_REPOS",
+		},
+	},
+	"enable-charts-all": {
+		Type:    boolType,
+		Default: false,
+		CLIFlag: cli.BoolFlag{
+			Name:   "enable-charts-all",
+			Usage:  "enable aggregated charts endpoint (/api/charts-all)",
+			EnvVar: "ENABLE_CHARTS_ALL",
+		},
+	},
+	"repo-list-max-objects": {
+		Type:    intType,
+		Default: 0,
+		CLIFlag: cli.IntFlag{
+			Name:   "repo-list-max-objects",
+			Usage:  "cap number of objects scanned when listing repositories (0 = unlimited)",
+			EnvVar: "REPO_LIST_MAX_OBJECTS",
+		},
+	},
+
 	"allowoverwrite": {
 		Type:    boolType,
 		Default: false,

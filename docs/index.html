@@ -1,0 +1,25 @@
+cd /home/user/captain-chart-museum/src
+cat > docs/index.html <<'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ChartMuseum RND Helm Repository</title>
+</head>
+<body>
+    <h1>ChartMuseum RND Helm Repository</h1>
+    <p>This is a Helm chart repository for Alauda.</p>
+    <h2>Add to Helm:</h2>
+    <pre>helm repo add cmigrator https://vladarh.github.io/chartmuseum-RND</pre>
+    <h2>Files:</h2>
+    <ul>
+        <li><a href="index.yaml">index.yaml</a></li>
+        <li><a href="chartmuseum-migrator-20251106-183744.tgz">chartmuseum-migrator-20251106-183744.tgz</a></li>
+    </ul>
+</body>
+</html>
+EOF
+
+git add docs/index.html
+git commit -m "Add index.html for GitHub Pages root"
+git push
